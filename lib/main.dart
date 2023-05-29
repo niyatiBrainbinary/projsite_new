@@ -35,6 +35,7 @@ import 'package:proj_site/view/dashBoard.dart';
 import 'package:proj_site/view/splash.dart';
 
 import 'api service/models/logistic_list_models/logistic_list_model.dart';
+import 'cubits/statistic_cubit.dart';
 
 DateTime get _now => DateTime.now();
 
@@ -91,6 +92,7 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (context) => TransportRequestCubit(),),
           BlocProvider(create: (context) => SubProjectListCubit(),),
           BlocProvider(create: (context) => SubProjectUserListCubit()),
+          BlocProvider(create: (context) => StatisticsCubit()),
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,

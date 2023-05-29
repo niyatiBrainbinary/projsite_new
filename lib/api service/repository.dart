@@ -62,11 +62,15 @@ import 'package:proj_site/api%20service/models/unloading_zone_models/create_zone
 import 'package:proj_site/services/sharedpreference_service.dart';
 import 'models/calender_models/user_list_model.dart';
 import 'models/project_list_models/project_list_model.dart';
+import 'models/statistic/addToWasteListModel.dart';
+import 'models/statistic/statisticSaveModel.dart';
+import 'models/statistic/wastFractionDropDownModel.dart';
 import 'models/sub_project_models/remove_user_model.dart';
 import 'models/sub_project_models/sub_project_user_list_model.dart';
 import 'models/sub_project_models/update_sub_project_model.dart';
 import 'models/terminal_models/terminal_list_model.dart';
 import 'models/update_organization/update_organization.dart';
+import 'models/statistic/wastContainerDropDownModel.dart';
 
 class Repository {
   Repository._();
@@ -1675,8 +1679,7 @@ class Repository {
       required String id,
       List<dynamic>? shipment,
       List<dynamic>? environment}) async {
-
-  /*  try {
+    /*  try {
       final res = await _dio.post(
         ApiRoutes.postSaveBookingFormNotification,
         options: Options(headers: {"token": accessToken}),
@@ -1696,7 +1699,10 @@ class Repository {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $accessToken'
     };
-    var request = http.Request('POST', Uri.parse('https://dev.projsite.com/delivery_management_api/public/api/update-project-settings'));
+    var request = http.Request(
+        'POST',
+        Uri.parse(
+            'https://dev.projsite.com/delivery_management_api/public/api/update-project-settings'));
     request.body = json.encode({
       "_id": id,
       "project_settings": {
@@ -1722,12 +1728,9 @@ class Repository {
       var data = await response.stream.bytesToString();
       var dataData = jsonDecode(data);
       return SaveBookingFormModel.fromJson(dataData);
-    }
-    else {
+    } else {
       print(response.reasonPhrase);
     }
-
-
   }
 
   static Future<SaveBookingFormModel?> postSaveCalender(
@@ -1736,9 +1739,7 @@ class Repository {
       bool? zone,
       bool? auto,
       bool? waste}) async {
-
-
- /*   try {
+    /*   try {
       final res = await _dio.post(ApiRoutes.postSaveBookingFormNotification,
           options: Options(headers: {"token": accessToken}),
           data: bodyCalender);
@@ -1755,7 +1756,10 @@ class Repository {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $accessToken'
     };
-    var request = http.Request('POST', Uri.parse('https://dev.projsite.com/delivery_management_api/public/api/update-project-settings'));
+    var request = http.Request(
+        'POST',
+        Uri.parse(
+            'https://dev.projsite.com/delivery_management_api/public/api/update-project-settings'));
     request.body = json.encode({
       "_id": id,
       "project_settings": {
@@ -1772,17 +1776,14 @@ class Repository {
       var data = await response.stream.bytesToString();
       var dataData = jsonDecode(data);
       return SaveBookingFormModel.fromJson(dataData);
-    }
-    else {
+    } else {
       print(response.reasonPhrase);
     }
   }
 
   static Future<SaveBookingFormModel?> postSaveNotification(
       {required String type, required String id, bool? mail, bool? sms}) async {
-
-
- /*   try {
+    /*   try {
       final res = await _dio.post(
         ApiRoutes.postSaveBookingFormNotification,
         options: Options(headers: {"token": accessToken}),
@@ -1797,19 +1798,18 @@ class Repository {
     }
     return null;*/
 
-
     var headers = {
       'token': accessToken,
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $accessToken'
     };
-    var request = http.Request('POST', Uri.parse('https://dev.projsite.com/delivery_management_api/public/api/update-mail-sms-settings'));
+    var request = http.Request(
+        'POST',
+        Uri.parse(
+            'https://dev.projsite.com/delivery_management_api/public/api/update-mail-sms-settings'));
     request.body = json.encode({
       "_id": id,
-      "mail_sms_settings": {
-        "mail": mail,
-        "sms": sms
-      }
+      "mail_sms_settings": {"mail": mail, "sms": sms}
     });
     request.headers.addAll(headers);
 
@@ -1819,15 +1819,10 @@ class Repository {
       var data = await response.stream.bytesToString();
       var dataData = jsonDecode(data);
       return SaveBookingFormModel.fromJson(dataData);
-    }
-    else {
+    } else {
       print(response.reasonPhrase);
     }
-
-
   }
-
-
 
   static Future<ProjectListModel?> postProjectList(
       String projectId, Map userInfo) async {
@@ -1918,8 +1913,6 @@ class Repository {
       "organization_id": orgId,
       "project_id": projectId,
     };
-
-
 
     try {
       final res = await _dio.post(
@@ -2078,15 +2071,14 @@ class Repository {
     return null;
   }
 
-
   static Future<AddNewSubProjectModel?> postAddSubProject(
       {required String orgId,
-        required String projectId,
-        required String name}) async {
+      required String projectId,
+      required String name}) async {
     Map<String, dynamic> body = {
       "organization_id": orgId,
-      "project_id" : projectId,
-      "sub_project_name" : name
+      "project_id": projectId,
+      "sub_project_name": name
     };
     try {
       final res = await _dio.post(
@@ -2107,9 +2099,6 @@ class Repository {
     }
     return null;
   }
-
-
-
 
   static Future<UpdateSubProjectModel?> postUpdateSubProject(
       {required String orgId,
@@ -2143,6 +2132,130 @@ class Repository {
   }
 
   ///-----------------
+
+  /// ----- statistics -----------
+
+  static Future<WasteContainerDropDownModel?> wasteContainerDropDown(
+      {required String projectId}) async {
+    Map<String, dynamic> body = {"project_id": projectId};
+
+    try {
+      final res = await _dio.post(
+        ApiRoutes.wasteContainerDropDown,
+        options: Options(headers: {
+          "token": accessToken,
+          "Content-Type": "application/json"
+        }),
+        data: body,
+      );
+      if (res.statusCode! >= 200 && res.statusCode! < 300) {
+        log("message=${res.data}");
+        return WasteContainerDropDownModel.fromJson(res.data);
+      }
+    } catch (e) {
+      print(e);
+      return null;
+    }
+    return null;
+  }
+
+  static Future<WasteFractionDropDownModel?> wasteFractionDropDown(
+      {required String projectId}) async {
+    Map<String, dynamic> body = {"project_id": projectId};
+
+    try {
+      final res = await _dio.post(
+        ApiRoutes.wasteFractionsDropDown,
+        options: Options(headers: {
+          "token": accessToken,
+          "Content-Type": "application/json"
+        }),
+        data: body,
+      );
+      if (res.statusCode! >= 200 && res.statusCode! < 300) {
+        log("message=${res.data}");
+        return WasteFractionDropDownModel.fromJson(res.data);
+      }
+    } catch (e) {
+      print(e);
+      return null;
+    }
+    return null;
+  }
+
+  static Future<AddToWasteListModel?> addToWasteList({
+    required String projectId,
+    required String wasteContainerId,
+    required String wasteFractionId,
+    required int numberOfContainers,
+    required int amountOfFraction,
+    required int amountOfTransports,
+  }) async {
+    Map<String, dynamic> body = {
+      "project_id": projectId,
+      "waste_container_id": wasteContainerId,
+      "waste_fraction_id": wasteFractionId,
+      "number_of_containers": numberOfContainers,
+      "amount_of_fraction": amountOfFraction,
+      "amount_of_transports": amountOfTransports
+    };
+
+    try {
+      final res = await _dio.post(
+        ApiRoutes.addToWasteList,
+        options: Options(headers: {
+          "token": accessToken,
+          "Content-Type": "application/json"
+        }),
+        data: body,
+      );
+      if (res.statusCode! >= 200 && res.statusCode! < 300) {
+        log("message=${res.data}");
+        return AddToWasteListModel.fromJson(res.data);
+      }
+    } catch (e) {
+      print(e);
+      return null;
+    }
+    return null;
+  }
+
+  static Future<StatisticSaveModel?> saveStatistic({
+    required String projectId,
+    required String wasteListId,
+    required List wastData,
+    required String date,
+    required String subProjectId,
+
+  }) async {
+    Map<String, dynamic> body = {
+      "project_id": projectId,
+      "waste_list_id": wasteListId,
+      "waste_list": wastData,
+      "date": date,
+      "sub_project_id": subProjectId
+    };
+
+    try {
+      final res = await _dio.post(
+        ApiRoutes.saveToWasteList,
+        options: Options(headers: {
+          "token": accessToken,
+          "Content-Type": "application/json"
+        }),
+        data: body,
+      );
+      if (res.statusCode! >= 200 && res.statusCode! < 300) {
+        log("message=${res.data}");
+        return StatisticSaveModel.fromJson(res.data);
+      }
+    } catch (e) {
+      print(e);
+      return null;
+    }
+    return null;
+  }
+
 
   static Future<List<EuroclassModel>?> postEuroclass() async {
     try {

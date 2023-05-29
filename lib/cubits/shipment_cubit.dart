@@ -241,27 +241,27 @@ class ShipmentCubit extends Cubit<ShipmentState> {
 
     monthlyShipments = await Repository.postMonthlyShipments(organizationId, status);
 
-    if (monthlyShipments != null) {
-      if(status=="pending"){
-        totalPendingShipment= monthlyShipments![0].totalShipments.toString();
-      } else if(status=="approved"){
-        totalApprovedShipment= monthlyShipments![0].totalShipments.toString();
-      } else if(status=="rejected"){
-        totalRejectedShipment= monthlyShipments![0].totalShipments.toString();
-      }
-        // shipmentSuppName=[];
-        // shipmentSuppId=[];
-        // for(int i=0; i<response.shipmentSupplierList!.length; i++){
-        //   shipmentSuppName.add(response.shipmentSupplierList![i].shipmentSupplierName!);
-        //   shipmentSuppId.add(response.shipmentSupplierList![i].id);
-        // }
+    for(int i = 0; i<monthlyShipments!.length; i++){
+
+      if (monthlyShipments != null) {
+        if(status=="pending"){
+          totalPendingShipment= monthlyShipments![i].totalShipments.toString();
+        } else if(status=="approved"){
+          totalApprovedShipment= monthlyShipments![i].totalShipments.toString();
+        } else if(status=="rejected"){
+          totalRejectedShipment= monthlyShipments![i].totalShipments.toString();
+        }
 
         emit(MonthlyShipmentsSuccess());
+
       }
-     else {
-      snackBar("Error to Load Data", false);
-      emit(MonthlyShipmentsError());
+      else {
+        snackBar("Error to Load Data", false);
+        emit(MonthlyShipmentsError());
+      }
     }
+
+
   }
 
 }

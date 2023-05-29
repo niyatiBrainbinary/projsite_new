@@ -69,6 +69,7 @@ class _PackageInformationState extends State<PackageInformation> {
    // bookingCub.AddBooking(calendarCub.requestData!.result!.id.toString(), calendarCub.requestData!.result!.responsiblePersonId.toString());
 
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

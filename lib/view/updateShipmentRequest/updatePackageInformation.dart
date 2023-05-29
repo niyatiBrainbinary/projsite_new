@@ -59,18 +59,12 @@ class _UpdatePackageInformationState extends State<UpdatePackageInformation> {
 
     bool isUpdatedThird = false;
     bool isUpdatedThirdValue = false;
-    // if(updatedThirdAmounts == _amountCon && updatedThirdValues == values)
-    //   {
-    //     isUpdatedThird=true;
-    //   }
-    // else
-    //   {
-    //     isUpdatedThird=false;
-    //   }
+
+
 
     for(int i=0;i< updatedThirdAmounts.length;i++)
     {
-      if(updatedThirdAmounts[i].text != _amountCon[i].text)
+      if(updatedThirdAmounts[i] != _amountCon[i].text)
       {
         isUpdatedThird = false;
         break;
@@ -98,12 +92,13 @@ class _UpdatePackageInformationState extends State<UpdatePackageInformation> {
     Map <dynamic, dynamic> packageInformationMap = {
       "kollis" : kollis
     };
+
     finalMap = {...widget.shipmentMap,...widget.enviromentMap,...packageInformationMap};
 
 
     bool finalUpdatedValue = false;
 
-    if(widget.isUpdated ==true && widget.isUpdatedSecond ==true && isUpdatedThird ==true && isUpdatedThirdValue ==true)
+    if(widget.isUpdated ==true && widget.isUpdatedSecond ==true && isUpdatedThird ==true && isUpdatedThirdValue == true)
       {
         finalUpdatedValue =true;
       }
@@ -117,8 +112,10 @@ class _UpdatePackageInformationState extends State<UpdatePackageInformation> {
   }
 
   initThird(){
-    updatedThirdValues = values;
-    updatedThirdAmounts = _amountCon;
+
+    // updatedThirdValues = values;
+    // updatedThirdAmounts = _amountCon;
+
   }
 
   initData(){
@@ -134,8 +131,11 @@ class _UpdatePackageInformationState extends State<UpdatePackageInformation> {
         values.add(bool.hasEnvironment(calendarCub.requestData!.result!.kollis![i].value.toString()));
         _amountCon.add(TextEditingController());
         _amountCon[i].text=calendarCub.requestData!.result!.kollis![i].amount;
+        updatedThirdValues.add(bool.hasEnvironment(calendarCub.requestData!.result!.kollis![i].value.toString()));
+        updatedThirdAmounts.add(calendarCub.requestData!.result!.kollis![i].amount);
       }
     }
+
   }
   @override
   void initState() {
@@ -313,7 +313,8 @@ class _UpdatePackageInformationState extends State<UpdatePackageInformation> {
                                                 child: Row(
                                                   children: [
                                                     simpleCheckBox(context,
-                                                        value: values[index], onChanged: (val) {
+                                                        value: values[index],
+                                                        onChanged: (val) {
                                                           setState(() {
                                                             values[index] = !values[index];
                                                           });
